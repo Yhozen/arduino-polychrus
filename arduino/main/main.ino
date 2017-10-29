@@ -1,29 +1,79 @@
-int red = 3;
-int blue = 5;
-int green = 6;
+/*
+  TCS3200
+  Color Sensor      Arduino
+  -----------      --------
+  VCC               5V
+  GND               GND
+  s0                8
+  s1                9
+  s2                12
+  s3                11
+  OUT               10
+  OE                GND
 
-void color(int Nred, int Ngreen, int Nblue) {
-  analogWrite(red, Nred);
-  analogWrite(blue, Nblue);
-  analogWrite(green, Ngreen);
-}
+  TCRT5000
+  Sensor      Arduino
+  -----------      --------
+  VCC               5V
+  GND               GND
+  DO                A3
 
-void setup() {
+*/
+const int s0 = 8;
+const int s1 = 9;
+const int s2 = 12;
+const int s3 = 11;
+const int out = 10;
+int trck = A3;
+// Variables
+int red = 0;
+int green = 0;
+int blue = 0;
+
+void setup () {
   Serial.begin(9600);
-  pinMode(red, OUTPUT);
-  pinMode(blue, OUTPUT);
-  pinMode(green, OUTPUT);
-}
- // Comprar led catodico
-void loop() {
-  delay(1200);
-  color(241, 196, 15);
-  delay(1200);
-  color(44, 62, 80);
-  delay(1200);
-  color(192, 57, 43);
-  delay(1200);
-  color(22, 160, 133);
+  pinMode(s0, OUTPUT);
+  pinMode(s1, OUTPUT);
+  pinMode(s2, OUTPUT);
+  pinMode(s3, OUTPUT);
+  pinMode(out, INPUT);
+  digitalWrite(s0, HIGH);
+  digitalWrite(s1, HIGH);
 }
 
+void loop() {
+  color();
+  Serial.println(analogRead(trck));
+  Serial.print("R Intensity:");
+  Serial.print(red, DEC);
+  Serial.print(" G Intensity: ");
+  Serial.print(green, DEC);
+  Serial.print(" B Intensity : ");
+  Serial.print(blue, DEC);
+  //Serial.println();
+
+  if (red < blue && red < green && red < 20) {
+    Serial.println(" - (Red Color)");
+  } else if (blue < red && blue < green) {
+    Serial.println(" - (Blue Color)");
+  } else if (green < red && green < blue) {
+    Serial.println(" - (Green Color)");
+  } else {
+    Serial.println();
+  }
+  delay(300);
+}
+
+void color () {
+  digitalWrite(s2, LOW);
+  digitalWrite(s3, LOW);
+  //count OUT, pRed, RED
+  red = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+  digitalWrite(s3, HIGH);
+  //count OUT, pBLUE, BLUE
+  blue = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+  digitalWrite(s2, HIGH);
+  //count OUT, pGreen, GREEN
+  green = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+}
 
