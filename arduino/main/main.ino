@@ -1,4 +1,6 @@
 /*
+  CONEXIONES
+
   TCS3200
   Color Sensor      Arduino
   -----------      --------
@@ -30,6 +32,10 @@ int red = 0;
 int green = 0;
 int blue = 0;
 
+char currentColor;
+
+int puntos = 0;
+
 void setup () {
   Serial.begin(9600);
   pinMode(s0, OUTPUT);
@@ -50,18 +56,8 @@ void loop() {
   Serial.print(green, DEC);
   Serial.print(" B Intensity : ");
   Serial.print(blue, DEC);
-  //Serial.println();
-
-  if (red < blue && red < green && red < 20) {
-    Serial.println(" - (Red Color)");
-  } else if (blue < red && blue < green) {
-    Serial.println(" - (Blue Color)");
-  } else if (green < red && green < blue) {
-    Serial.println(" - (Green Color)");
-  } else {
-    Serial.println();
-  }
-  delay(300);
+  Serial.print(currentColor);
+  delay(100);
 }
 
 void color () {
@@ -75,5 +71,22 @@ void color () {
   digitalWrite(s2, HIGH);
   //count OUT, pGreen, GREEN
   green = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+  if (red < blue && red < green && red < 20) {
+    currentColor = 'r';
+  } else if (blue < red && blue < green) {
+    currentColor = 'b';
+  } else if (green < red && green < blue) {
+    currentColor = 'g';
+  } else {
+    Serial.println("No nuevo color detectado");
+  }
+}
+
+void juego(char eleccion) {
+  if (eleccion == currentColor) {
+    puntos += 10;
+  } else {
+    puntos -= 5;
+  }
 }
 
