@@ -13,7 +13,7 @@
   OUT               10
   OE                GND
 
-  TCRT5000
+  KY-033 
   Sensor      Arduino
   -----------      --------
   VCC               5V
