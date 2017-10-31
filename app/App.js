@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Text,
   ImageBackground,
-  View
+  View, Button, TouchableOpacity
 } from 'react-native';
 
 const instructions = Platform.select({
@@ -35,9 +35,13 @@ export default class App extends Component<{}> {
   }}
   source={require('./images/bg.jpg')}
 >
+
   <Text
     style={{
       backgroundColor: 'transparent',
+      textShadowColor: 'black',
+      textShadowRadius: 5,
+      textShadowOffset: {width: 0, height: 1},
       textAlign: 'center',
       fontSize: 30,
       color: 'white',
@@ -46,6 +50,29 @@ export default class App extends Component<{}> {
   >
     Polychrus Marmoratus
   </Text>
+  <View style={{margin:7}}>
+  <TouchableOpacity
+    activeOpacity={0.9}
+    onPress={()=> console.log('hi')}>
+    <Text
+      style={{
+        backgroundColor: 'aqua',
+        textAlign: 'center',
+        textShadowColor: 'rgba(0,0,0,0.7)',
+        textShadowRadius: 1,
+        textShadowOffset: {width: 0, height: 1},
+        fontSize: 14,
+        color: 'white',
+        marginLeft: 30,
+        marginRight: 30,
+        borderRadius: 3,
+        padding: 7
+      }}
+    >
+      Iniciar
+    </Text>
+   </TouchableOpacity>
+  </View>
 </ImageBackground>
     );
   }
