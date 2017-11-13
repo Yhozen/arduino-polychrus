@@ -1,6 +1,11 @@
 /*
   CONEXIONES
 
+  DC
+  -----------      --------
+  IN                 7
+  OUT                GND
+  
   TCS3200
   Color Sensor      Arduino
   -----------      --------
@@ -26,6 +31,7 @@ const int s1 = 9;
 const int s2 = 12;
 const int s3 = 11;
 const int out = 10;
+const int dc = 7;
 int trck = A3;
 // Variables
 int red = 0;
@@ -58,6 +64,14 @@ void loop() {
   Serial.print(blue, DEC);
   Serial.print(currentColor);
   delay(100);
+  avanzar(100);
+}
+
+void avanzar(int tiempo) {
+  digitalWrite(dc, HIGH);
+  delay(tiempo);
+  digitalWrite(dc, LOW);
+  delay(20);
 }
 
 void color () {
