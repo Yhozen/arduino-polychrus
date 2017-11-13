@@ -18,7 +18,7 @@ void loop() {
     readByte = BT.readString();
     readSomething = true;
   }
-  delay(50);
+  delay(5);
   if (readSomething == true) {
     delay(20);
     readSomething = false;

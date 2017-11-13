@@ -4,11 +4,12 @@ import { Container, Button, Text } from 'native-base';
 var BTSerial = require('react-native-android-btserial');
 
 export default class Game extends Component<{}> {
-  state  = { devices: [], connected: true }
+  state  = { devices: [], connected: false }
   componentDidMount() {
     BTSerial.enableBT(function(err, enabled) {
       // enabled is true/false
-    });
+    })
+    BTSerial.disconnect()
   }
   search() {
     const _this = this
@@ -28,8 +29,13 @@ export default class Game extends Component<{}> {
       }
     })
   }
+  prenderLed() {
+    BTSerial.write('test', null, function(err) {
+      console.log(err)
+    });
+  }
   render() {
-    let { devices } =this.state
+    let { devices, connected } =this.state
     return (
       <View style={styles.container}>
         <Container>
@@ -42,14 +48,14 @@ export default class Game extends Component<{}> {
       <Text style={styles.welcome}>Bienvenute!</Text>
       {devices.map( (device,i) => {
         return (
-          <Button key={i} onPress={this.connect.bind(this,devices[i].address)}>
+          <Button key={i} onPress={this.connect.bind(this,device.address)}>
             <Text>
             {device.name}
             </Text>
           </Button>
         )
       })}
-    
+      {connected ? <Button onPress={() => this.prenderLed()}><Text>No conectado</Text></Button> : <Text>No conectado</Text>}
       </View>
     )
   }
