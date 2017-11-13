@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import {
   Platform,
   StyleSheet,
-  Text,
   ImageBackground,
-  View, Button, TouchableOpacity
+  View, TouchableOpacity
 } from 'react-native'
+
+import { Button, Text } from 'native-base';
+
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' +
@@ -35,14 +37,11 @@ export default class Welcome extends Component<{}> {
     Polychrus Marmoratus
   </Text>
   <View style={{margin:7}}>
-  <TouchableOpacity
-    activeOpacity={0.9}
-    delayPressOut={50}
-    onPressOut={()=> start()}>
-    <Text style={styles.ButtonText}>
+    <Button onPress={()=>start()} block rounded info>
+    <Text>
       Iniciar
     </Text>
- </TouchableOpacity>
+ </Button>
   </View>
 </ImageBackground>
     )
