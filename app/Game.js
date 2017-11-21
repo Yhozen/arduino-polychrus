@@ -30,7 +30,7 @@ export default class Game extends Component<{}> {
     })
   }
   prenderLed() {
-    BTSerial.write('test', null, function(err) {
+    BTSerial.write('a', null, function(err) {
       console.log(err)
     });
   }
@@ -45,7 +45,6 @@ export default class Game extends Component<{}> {
           </Text>
        </Button>
        </Container>
-      <Text style={styles.welcome}>Bienvenute!</Text>
       {devices.map( (device,i) => {
         return (
           <Button key={i} onPress={this.connect.bind(this,device.address)}>

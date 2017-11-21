@@ -1,10 +1,11 @@
 /*
   CONEXIONES
 
-  DC
+  SERVO
   -----------      --------
-  IN                 7
-  OUT                GND
+  SIGNAL             7
+  GND                GND
+  POWER .            VCC
 
   TCS3200
   Color Sensor      Arduino
@@ -18,29 +19,21 @@
   OUT               10
   OE                GND
 
-  KY-033
-  Sensor      Arduino
-  -----------      --------
-  VCC               5V
-  GND               GND
-  DO                A3
-
 */
 int stop_position = 0;
 int velocity = 20;
 int d = 300;
 
 #include <Servo.h>
-Servo servo1;
+Servo servo1, servo2;
 
 const int s0 = 8;
 const int s1 = 9;
 const int s2 = 12;
 const int s3 = 11;
 const int out = 10;
-const int dc = 7;
 const int servoPin = 7;
-
+const int pinServo2 = 6;
 
 // Variables
 int red = 0;
@@ -48,8 +41,6 @@ int green = 0;
 int blue = 0;
 
 char currentColor;
-
-int puntos = 0;
 
 void setup () {
   Serial.begin(9600);
@@ -61,31 +52,18 @@ void setup () {
   digitalWrite(s0, HIGH);
   digitalWrite(s1, HIGH);
   servo1.attach(servoPin);
-  //  servo2.attach(pinServo2);
+  servo2.attach(pinServo2);
   servo1.write(90);
-  //  servo2.write(90);
+  servo2.write(90);
 }
 
 void loop() {
-  color();
-  Serial.print("R Intensity:");
-  Serial.print(red, DEC);
-  Serial.print(" G Intensity: ");
-  Serial.print(green, DEC);
-  Serial.print(" B Intensity : ");
-  Serial.print(blue, DEC);
-  Serial.print(currentColor);
-  delay(5);
-  if (currentColor == 'b') {
-    avanzar(1000);
-  }
-}
-
-void avanzar(int tiempo) {
-  velocidad(2, servo1);
-  delay(tiempo);
   velocidad(1, servo1);
-  delay(20);
+  velocidad(1, servo2);
+  delay(10000);
+  velocidad(2, servo1);
+  velocidad(2, servo2);
+  delay(10000);
 }
 
 void color () {
@@ -110,17 +88,9 @@ void color () {
   }
 }
 
-void juego(char eleccion) {
-  if (eleccion == currentColor) {
-    puntos += 10;
-  } else {
-    puntos -= 5;
-  }
-}
-
 void velocidad (int v, Servo s) {
   if (v == 1) {
-    s.write(80);  // contra el reloj
+    s.write(80);
     delay(10);
   } else if (v == 2) {
     s.write(stop_position + velocity);

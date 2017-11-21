@@ -15,7 +15,7 @@ void loop() {
   boolean readSomething = false;
   BT.listen();
   while (BT.available() > 0) {
-    readByte = BT.readString();
+    readByte = BT.read();
     readSomething = true;
   }
   delay(5);
