@@ -59,10 +59,8 @@ void setup () {
 
 void loop() {
   velocidad(1, servo1);
-  velocidad(1, servo2);
   delay(10000);
   velocidad(2, servo1);
-  velocidad(2, servo2);
   delay(10000);
 }
 
