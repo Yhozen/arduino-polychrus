@@ -1,49 +1,34 @@
 import React, { Component } from 'react'
-import {
-  Platform,
-  StyleSheet,
-  ImageBackground,
-  View, TouchableOpacity
-} from 'react-native'
+import { Platform, StyleSheet, ImageBackground, View, TouchableOpacity } from 'react-native'
 
-import { Button, Text } from 'native-base';
-
-
-// const instructions = Platform.select({
-//   ios: 'Press Cmd+R to reload,\n' +
-//     'Cmd+D or shake for dev menu',
-//   android: 'Double tap R on your keyboard to reload,\n' +
-//     'Shake or press menu button for dev menu',
-// });
+import { Button, Text } from 'native-base'
 
 export default class Welcome extends Component<{}> {
   render() {
     let { start } = this.props
-    const resizeMode = 'view'
     return (
       <ImageBackground
-  style={{
-    backgroundColor: '#ccc',
-    flex: 1,
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  }}
-  source={require('./images/bg.jpg')}
->
-
-  <Text style={styles.MainText}>
-    Polychrus Marmoratus
-  </Text>
-  <View style={{margin:7}}>
-    <Button onPress={()=>start()} block rounded info>
-    <Text>
-      Iniciar
-    </Text>
- </Button>
-  </View>
-</ImageBackground>
+        style={{
+          backgroundColor: '#ccc',
+          flex: 1,
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+        }}
+        source={require('./images/bg.jpg')}
+      >
+        <Text style={styles.MainText}>
+          Polychrus Marmoratus
+        </Text>
+        <View style={{margin:7}}>
+          <Button onPress={()=>start()} block rounded info>
+              <Text>
+                Iniciar
+              </Text>
+          </Button>
+        </View>
+      </ImageBackground>
     )
   }
 }
@@ -54,18 +39,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
+  }, welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  instructions: {
+  }, instructions: {
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
-  ButtonText: {
+  }, ButtonText: {
     backgroundColor: 'aqua',
     textAlign: 'center',
     textShadowColor: 'rgba(0,0,0,0.7)',
@@ -77,8 +59,7 @@ const styles = StyleSheet.create({
     marginRight: 30,
     borderRadius: 3,
     padding: 7
-  },
-  MainText: {
+  }, MainText: {
     backgroundColor: 'transparent',
     textShadowColor: 'black',
     textShadowRadius: 5,
