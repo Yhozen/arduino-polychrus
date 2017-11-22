@@ -35,7 +35,7 @@ export default class Game extends Component<{}> {
           <Header style={{backgroundColor:'#000'}}>
             <Left/>
           <Body>
-            <Title>Header</Title>
+            <Title>Heade</Title>
           </Body>
           <Right />
         </Header>

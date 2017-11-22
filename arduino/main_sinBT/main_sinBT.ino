@@ -12,6 +12,13 @@
   GND                GND
   POWER .            VCC
 
+  HC-SR04
+  -----------      --------
+  triggerPin         A0
+  echo Pin           A1
+  GND                GND
+  POWER .            VCC
+
   TCS3200
   Color Sensor      Arduino
   -----------      --------
@@ -24,13 +31,6 @@
   OUT               10
   OE                GND
 
-  KY-033
-  Sensor      Arduino
-  -----------      --------
-  VCC               5V
-  GND               GND
-  DO                A3
-
 */
 int stop_position = 0;
 int velocity = 20;
@@ -40,17 +40,17 @@ int d = 300;
 #include <Servo.h>
 
 Servo cola;
-//SoftwareSerial BT(0, 1);
+SoftwareSerial BT(0, 1);
 
 const int s0 = 8;
 const int s1 = 9;
 const int s2 = 12;
 const int s3 = 11;
 const int out = 10;
-const int dc = 3;
+const int dc = 5;
 const int servoPin = 6;
-const int echoPin = 6;
-const int trigPin = 5;
+const int echoPin = A1;
+const int trigPin = A0;
 
 
 // Variables
@@ -62,7 +62,7 @@ char readByte, colorActual;
 int puntos = 0;
 
 void setup () {
-  //  BT.begin(9600);
+  Serial.begin(9600);
   pinMode(s0, OUTPUT);
   pinMode(s1, OUTPUT);
   pinMode(s2, OUTPUT);
@@ -78,23 +78,21 @@ void setup () {
 }
 
 void loop() {
-  color();
-  delay(5);
-  if (distancia > 4) {
-    if (colorActual == 'b') {
-      velocidad(2);
-    } else {
-      velocidad(0);
-    }
+  //  color();
+  getDistancia();
+  moverCola();
+  delay(10);
+  if (distancia > 10 ) {
+    juego();
   } else {
-    velocidad(0):
+    velocidad(0);
   }
 }
 
 void velocidad(int n) {
   switch (n) {
     case 0:
-      analogWrite(dc, 0);
+      analogWrite(dc, 10);
     case 1:
       analogWrite(dc, 100);
     case 2:
@@ -106,13 +104,26 @@ void velocidad(int n) {
 
   }
 }
+
 void color () {
+  // Setting red filtered photodiodes to be read
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
-  red = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+  // Reading the output frequency
+  red = pulseIn(out, LOW);
+  delay(5);
+  // Setting Green filtered photodiodes to be read
+  digitalWrite(s2, HIGH);
   digitalWrite(s3, HIGH);
-  blue = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
-  green = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
+  // Reading the output frequency
+  green = pulseIn(out, LOW);
+  delay(5);
+  // Setting Blue filtered photodiodes to be read
+  digitalWrite(s2, LOW);
+  digitalWrite(s3, HIGH);
+  // Reading the output frequency
+  blue = pulseIn(out, LOW);
+  delay(5);
   if (red < blue && red < green && red < 20) {
     colorActual = 'r';
   } else if (blue < red && blue < green) {
@@ -120,6 +131,12 @@ void color () {
   } else if (green < red && green < blue) {
     colorActual = 'g';
   }
+}
+
+void juego(char color) {
+  if (color == colorActual) {
+    puntos +=100;
+  } 
 }
 
 void bluetooth() {
@@ -137,12 +154,18 @@ void bluetooth() {
   }
 }
 
+void moverCola() {
+  cola.write(0);
+  delay(500);
+  cola.write(180);
+  delay(500);
+}
+
 void getDistancia() {
   long duracion;
   digitalWrite(trigPin, LOW);  // Added this line
   delayMicroseconds(2); // Added this line
   digitalWrite(trigPin, HIGH);
-  //  delayMicroseconds(1000); - Removed this line
   delayMicroseconds(10); // Added this line
   digitalWrite(trigPin, LOW);
   duracion = pulseIn(echoPin, HIGH);

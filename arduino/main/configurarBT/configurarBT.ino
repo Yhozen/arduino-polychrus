@@ -1,6 +1,6 @@
 const int LED = 13;
 const int BTPWR = 12;
-char nombreBT[20] = "Rinoceronte";
+char nombreBT[20] = "Polychrus";
 char velocidad = '4'; //9600
 char pin [5] = "0000";
 void setup() {
