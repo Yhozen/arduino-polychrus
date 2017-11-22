@@ -80,11 +80,11 @@ void setup () {
 void loop() {
   //  color();
   getDistancia();
-  moverCola();
   delay(10);
   if (distancia > 10 ) {
-    juego();
+    moverCola();
   } else {
+    cola.write(90);
     velocidad(0);
   }
 }
@@ -106,22 +106,16 @@ void velocidad(int n) {
 }
 
 void color () {
-  // Setting red filtered photodiodes to be read
   digitalWrite(s2, LOW);
   digitalWrite(s3, LOW);
-  // Reading the output frequency
   red = pulseIn(out, LOW);
   delay(5);
-  // Setting Green filtered photodiodes to be read
   digitalWrite(s2, HIGH);
   digitalWrite(s3, HIGH);
-  // Reading the output frequency
   green = pulseIn(out, LOW);
   delay(5);
-  // Setting Blue filtered photodiodes to be read
   digitalWrite(s2, LOW);
   digitalWrite(s3, HIGH);
-  // Reading the output frequency
   blue = pulseIn(out, LOW);
   delay(5);
   if (red < blue && red < green && red < 20) {
@@ -163,10 +157,10 @@ void moverCola() {
 
 void getDistancia() {
   long duracion;
-  digitalWrite(trigPin, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10); // Added this line
+  delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
   duracion = pulseIn(echoPin, HIGH);
   distancia = (duracion / 2) / 29.1;
