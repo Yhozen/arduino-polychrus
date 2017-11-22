@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
-import { Container, Button, Text } from 'native-base';
-var BTSerial = require('react-native-android-btserial');
+import { Container, Button, Text, Header, Title, Content, Body, Right, Left } from 'native-base';
+import BTSerial from 'react-native-android-btserial'
+
+const address = '98:D3:32:70:A5:C1'
 
 export default class Game extends Component<{}> {
   state  = { devices: [], connected: false }
@@ -10,18 +12,10 @@ export default class Game extends Component<{}> {
       // enabled is true/false
     })
     BTSerial.disconnect()
+    this.connect()
+    
   }
-  search() {
-    const _this = this
-    BTSerial.listDevices(function(err, BTdevices) {
-      if (BTdevices) {
-        let devices = Object.values(JSON.parse(BTdevices))
-        console.log(devices)
-        _this.setState({devices})
-      }
-    })
-  }
-  connect(address) {
+  connect() {
     let _this = this
     BTSerial.connect(address, function(err, status, deviceName){
       if (status) {
@@ -29,33 +23,26 @@ export default class Game extends Component<{}> {
       }
     })
   }
-  prenderLed() {
-    BTSerial.write('a', null, function(err) {
+  write(char) {
+    BTSerial.write(char, null, function(err) {
       console.log(err)
     });
   }
   render() {
     let { devices, connected } =this.state
     return (
-      <View style={styles.container}>
-        <Container>
-          <Button onPress={this.search.bind(this)} large rounded info>
-          <Text>
-            Iniciar
-          </Text>
-       </Button>
-       </Container>
-      {devices.map( (device,i) => {
-        return (
-          <Button key={i} onPress={this.connect.bind(this,device.address)}>
-            <Text>
-            {device.name}
-            </Text>
-          </Button>
-        )
-      })}
-      {connected ? <Button onPress={() => this.prenderLed()}><Text>No conectado</Text></Button> : <Text>No conectado</Text>}
-      </View>
+      <Container>
+          <Header style={{backgroundColor:'#000'}}>
+            <Left/>
+          <Body>
+            <Title>Header</Title>
+          </Body>
+          <Right />
+        </Header>
+        <Content>
+        {connected ? <Button onPress={() => this.write('r')}><Text>No conectado</Text></Button> : <Text>No conectado</Text>}
+        </Content>
+      </Container>
     )
   }
 }
