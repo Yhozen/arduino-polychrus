@@ -32,15 +32,18 @@ export default class Game extends Component<{}> {
     let { devices, connected } =this.state
     return (
       <Container>
-          <Header style={{backgroundColor:'#000'}}>
+          <Header style={{backgroundColor:'#2ecc71'}}>
             <Left/>
           <Body>
-            <Title>Heade</Title>
+            <Title>Header</Title>
           </Body>
           <Right />
         </Header>
         <Content>
-        {connected ? <Button onPress={() => this.write('r')}><Text>No conectado</Text></Button> : <Text>No conectado</Text>}
+        {connected ? <Text>conectado</Text>: <Text>No conectado</Text>}
+        <Button danger onPress={() => this.write('r')}><Text>r</Text></Button> 
+        <Button success onPress={() => this.write('g')}><Text>g</Text></Button> 
+        <Button info onPress={() => this.write('b')}><Text>b</Text></Button> 
         </Content>
       </Container>
     )

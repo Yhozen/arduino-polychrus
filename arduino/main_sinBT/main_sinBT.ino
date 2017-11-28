@@ -51,6 +51,9 @@ const int dc = 5;
 const int servoPin = 6;
 const int echoPin = A1;
 const int trigPin = A0;
+const int r = 2;
+const int g = 3;
+const int b = 4;
 
 
 // Variables
@@ -58,16 +61,20 @@ int red = 0;
 int green = 0;
 int blue = 0;
 long distancia;
-char readByte, colorActual;
+char colorElige =  48;
+char colorActual;
 int puntos = 0;
 
 void setup () {
-  Serial.begin(9600);
+  BT.begin(9600);
   pinMode(s0, OUTPUT);
   pinMode(s1, OUTPUT);
   pinMode(s2, OUTPUT);
   pinMode(s3, OUTPUT);
   pinMode(out, INPUT);
+  pinMode(r, OUTPUT);
+  pinMode(dc, OUTPUT);
+  analogWrite(dc, 0);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   digitalWrite(s0, HIGH);
@@ -78,21 +85,47 @@ void setup () {
 }
 
 void loop() {
-  //  color();
+  color();
   getDistancia();
+  bluetooth();
   delay(10);
-  if (distancia > 10 ) {
+  if (distancia > 15 ) {
     moverCola();
   } else {
     cola.write(90);
-    velocidad(0);
+    analogWrite(dc, 0);
+  }
+  prenderLuz();
+}
+
+void app() {
+  if (colorActual == colorElige) {
+    analogWrite(dc,255);
+  } else {
+    analogWrite(dc, 0);
+  }
+}
+
+void prenderLuz() {
+  if (colorActual == 'r') {
+    digitalWrite(r, HIGH);
+    digitalWrite(g, LOW);
+    digitalWrite(b, LOW);
+  } else if (colorActual == 'g') {
+    digitalWrite(g, HIGH);
+    digitalWrite(b, LOW);
+    digitalWrite(r, LOW);
+  } else if (colorActual == 'b') {
+    digitalWrite(b, HIGH);
+    digitalWrite(r, LOW);
+    digitalWrite(g, LOW);
   }
 }
 
 void velocidad(int n) {
   switch (n) {
     case 0:
-      analogWrite(dc, 10);
+      analogWrite(dc, 0);
     case 1:
       analogWrite(dc, 100);
     case 2:
@@ -101,7 +134,6 @@ void velocidad(int n) {
       analogWrite(dc, 200);
     case 4:
       analogWrite(dc, 255);
-
   }
 }
 
@@ -129,20 +161,20 @@ void color () {
 
 void juego(char color) {
   if (color == colorActual) {
-    puntos +=100;
-  } 
+    puntos += 100;
+  }
 }
 
 void bluetooth() {
   boolean readSomething = false;
   BT.listen();
   while (BT.available() > 0) {
-    readByte = BT.read();
+    colorElige = BT.read();
     readSomething = true;
   }
   delay(5);
   if (readSomething == true) {
-    juego(readByte);
+    app();
     delay(20);
     readSomething = false;
   }
